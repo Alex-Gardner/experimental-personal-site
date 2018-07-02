@@ -1,0 +1,51 @@
+Starting up with Webpack:
+
+Commands
+Effects
+Description
+
+Webpack Base Install
+$ npm install webpack webpack-cli --save-dev
+-----------------------
+
+default config (webpack 4 no-config default settings)
+entry: src/index.js
+output: dist/main.js (defaults to production mode - minified code)
+----------------------------------
+
+Babel install
+$ npm install babel-core babel-loader babel-preset-env babel-preset-react --save-dev
+
+
+babel-core: base functional utility
+babel-loader: es6+ ->> es5
+babel-preset-env: automatically determines the plugins and polyfills needed
+based on runtime env.
+babel-preset-react: React JSX code to browser-decipherable code
+
+in .babelrc:
+{
+"presets": ["env"]
+}
+///////////////////////////////////////////////////////////
+Using Webpack to bundle modules
+
+Before you get started with Webpack you need to have a project folder open
+and a package.json file.
+To get started with webpack, you need to install webpack and webpack cli
+to get access to webpack on the command line. We also save these as development
+dependencies in package.json
+
+    $ npm install webpack webpack-cli --save-dev
+
+We'd probably like to alias a command to run webpack easily
+
+In package.json:
+
+  scripts: {
+    "build": "webpack"
+  }
+When we run $ npm build , we run the webpack command which bundles our
+modules and outputs a javascript file (minified by default
+
+)

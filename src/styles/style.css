@@ -1,0 +1,21 @@
+.grid-holder {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 50px 5px;
+}
+
+.bookends {
+	grid-column: 1 / 3;
+	background-color: plum;
+}
+.bookends ul {
+	list-style: none;
+}
+
+.article-portal {
+	border: 8px lightgreen solid;
+}
+
+.sample-portal {
+	border: 8px lightblue solid;
+}

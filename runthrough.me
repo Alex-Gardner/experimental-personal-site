@@ -1,0 +1,161 @@
+# Simply Put...
+
+Webpack tutorial taken from:
+https://www.valentinog.com/blog/react-webpack-babel/
+https://webpack.js.org/guides/asset-management/
+
+
+- connect to github: http://kbroman.org/github_tutorial/pages/init.html
+- npm init to get a package.json file
+- be sure to create a .gitignore file ignoring itself as well as node_modules
+  -- .gitignore
+  -- /node_modules
+- install webpack
+  $ npm install webpack webpack-cli -D
+- add a build script for webpack to package.json
+  scripts: {
+    "build": "webpack"
+  }
+- webpack4 by default looks for a file ./src/index.js to get bundled and outputs
+  ./dist/main.js
+  $ npm run build
+- This runs the webpack command (defaults to production mode) and outputs a minified bundle
+  file in ./dist/main.js
+
+---- Installing babel ----
+- install babel via npm
+  $ npm i babel-core babel-loader babel-preset-env --save-dev
+- create and configure .babelrc to let babel know how you'll be using it:
+    {
+    "presets": ["env"]
+    }
+- configure babel-loader
+  -- can either use webpack's config file (webpack.config.js) or --module-bind in npm scripts
+  - create a config file (webpack.config.js) with the following information:
+  module.exports = {
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader"
+          }
+        }
+      ]
+    }
+  };
+
+- To run babel-loader with out a config file, you can change your package.json scripts:
+"scripts": {
+  "dev": "webpack --mode development --module-bind js=babel-loader",
+  "build": "webpack --mode production --module-bind js=babel-loader"
+}
+
+---- Installing React ----
+$ npm i react react-dom --save-dev
+$ npm i babel-preset-react --save-dev
+- configure .babelrc for the preset:
+  {
+  "presets": ["env", "react"]
+  }
+
+---- Processing HTML ----
+- To process HTML, webpack needs html-webpack-plugin and html-loader
+  $ npm i html-webpack-plugin html-loader --save-dev
+- Update the webpack configuration file:
+
+----------------------
+    const HtmlWebPackPlugin = require('html-webpack-plugin');
+
+    module.exports = {
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader'
+            }
+          },
+          {
+            test: /\.html$/,
+            use: [
+              {
+                loader: 'html-loader',
+                options: { minimize: true }
+              }
+            ]
+          }
+        ]
+      },
+      plugins: [
+        new HtmlWebPackPlugin({
+          template: './src/index.html',
+          filename: './index.html'
+        })
+      ]
+    };
+--------------------------------------------
+- create an HTML file in the src directory called index.html:
+----------------------
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title></title>
+      </head>
+      <body>
+        <div id="root">
+
+        </div>
+      </body>
+    </html>
+-----------------------
+- Run the build script and view the ./dist/index.html to see the output file
+  (the bundle with main.js is already injected)
+
+----------------- Configuring CSS -------------------------
+https://webpack.js.org/guides/asset-management/
+
+- To import a CSS file within a JS module, we need to install style-loader and css-loader
+  to the module configuration
+
+  $ npm install --save-dev style-loader css-loader
+
+- In webpack's config files, set up the module rules for CSS:
+    ...
+    rules: [
+      {
+        test: '/\.css$/',
+        use: [ style-loader, css-loader ]
+      }
+    ]
+    ...
+- Add in a .css file in the src directory
+- import css file in the necessary module (top-level js file would work):
+  in src/index.js
+    import './<filename>.css'
+- Use webpack to build a new bundle:
+  $ npm run build
+
+------------------------ Development Server ----------------------
+- To get webpack's development server up and running (webpack-dev-server)
+- Install the package and add it as a dependency
+  $ npm install --save-dev webpack-dev-server
+- In your config file, tell dev-sever where to look for changes
+  module.exports {
+    ...,
+    devServer: {
+      contentBase: './dist'
+    },
+    ...
+  }
+- Add a script to your package.json to easily run
+  "scripts" {
+    ...,
+    "start": "webpack-dev-server --open --mode development",
+    ...
+  }
+- Get the server up and running
+  $ npm run start
